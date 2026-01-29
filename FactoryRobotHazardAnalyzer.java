@@ -52,20 +52,28 @@ public class FactoryRobotHazardAnalyzer {
         }
 
         // Determine Risk Factor
-        double machineRiskFactor = 0.0;
-        switch (machineryState) {
-            case "Worn":
-                machineRiskFactor = 1.3;
-                break;
-            case "Faulty":
-                machineRiskFactor = 2.0;
-                break;
-            case "Critical":
-                machineRiskFactor = 3.0;
-                break;
-        }
+        double machineRiskFactor = getMachineryRiskFactor(machineryState);
 
         // Calculate Hazard Risk
         return ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor);
     }
+
+    private static double getMachineryRiskFactor(String machineryState) {
+        switch (machineryState) {
+            case "Worn":
+                return 1.3;
+            case "Faulty":
+                return 2.0;
+            case "Critical":
+                return 3.0;
+            default:
+                return 0.0; // Should be unreachable due to validation
+        }
+
+    
+    }
 }
+
+
+    
+    
