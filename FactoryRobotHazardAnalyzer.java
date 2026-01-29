@@ -26,7 +26,8 @@ public class FactoryRobotHazardAnalyzer {
         String machineryState = scanner.nextLine();
 
         try {
-            double result = CalculateHazardRisk(armPrecision, workerDensity, machineryState);
+            RobotHazardAuditor auditor = new RobotHazardAuditor();
+            double result = auditor.CalculateHazardRisk(armPrecision, workerDensity, machineryState);
             System.out.println("\n--- Hazard Analysis Result ---");
             System.out.printf("Hazard Risk Score: %.2f%n", result);
         } catch (RobotSafetyException e) {
@@ -35,45 +36,4 @@ public class FactoryRobotHazardAnalyzer {
 
         scanner.close();
     }
-
-    public static double CalculateHazardRisk(double armPrecision, int workerDensity, String machineryState)
-            throws RobotSafetyException {
-        // Validation
-        if (armPrecision < 0.0 || armPrecision > 1.0) {
-            throw new RobotSafetyException("Error: Arm precision must be 0.0-1.0");
-        }
-
-        if (workerDensity < 1 || workerDensity > 20) {
-            throw new RobotSafetyException("Error: Worker density must be 1-20");
-        }
-
-        if (!machineryState.equals("Worn") && !machineryState.equals("Faulty") && !machineryState.equals("Critical")) {
-            throw new RobotSafetyException("Error: Unsupported machinery state");
-        }
-
-        // Determine Risk Factor
-        double machineRiskFactor = getMachineryRiskFactor(machineryState);
-
-        // Calculate Hazard Risk
-        return ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor);
-    }
-
-    private static double getMachineryRiskFactor(String machineryState) {
-        switch (machineryState) {
-            case "Worn":
-                return 1.3;
-            case "Faulty":
-                return 2.0;
-            case "Critical":
-                return 3.0;
-            default:
-                return 0.0; // Should be unreachable due to validation
-        }
-
-    
-    }
 }
-
-
-    
-    
