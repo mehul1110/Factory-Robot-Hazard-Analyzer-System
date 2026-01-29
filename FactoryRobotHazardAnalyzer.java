@@ -25,6 +25,25 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter Machinery State (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
+        // Validation
+        if (armPrecision < 0.0 || armPrecision > 1.0) {
+            System.out.println("Error: Arm precision must be 0.0-1.0");
+            scanner.close();
+            return;
+        }
+
+        if (workerDensity < 1 || workerDensity > 20) {
+            System.out.println("Error: Worker density must be 1-20");
+            scanner.close();
+            return;
+        }
+
+        if (!machineryState.equals("Worn") && !machineryState.equals("Faulty") && !machineryState.equals("Critical")) {
+            System.out.println("Error: Unsupported machinery state");
+            scanner.close();
+            return;
+        }
+
         // Determine Risk Factor
         double machineRiskFactor = 0.0;
         switch (machineryState) {
@@ -38,9 +57,9 @@ public class FactoryRobotHazardAnalyzer {
                 machineRiskFactor = 3.0;
                 break;
             default:
-                // For UC3, we assume valid input or handle default roughly
-                machineRiskFactor = 0.0;
-                break;
+                // Unreachable if validation passes
+                return;
+
         }
 
         // Calculate Hazard Risk
