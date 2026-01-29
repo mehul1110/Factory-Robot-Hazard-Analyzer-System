@@ -25,11 +25,31 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter Machinery State (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
-        // Echo Inputs (for UC2)
-        System.out.println("\n--- Input Summary ---");
-        System.out.println("Precision: " + armPrecision);
-        System.out.println("Density: " + workerDensity);
-        System.out.println("State: " + machineryState);
+        // Determine Risk Factor
+        double machineRiskFactor = 0.0;
+        switch (machineryState) {
+            case "Worn":
+                machineRiskFactor = 1.3;
+                break;
+            case "Faulty":
+                machineRiskFactor = 2.0;
+                break;
+            case "Critical":
+                machineRiskFactor = 3.0;
+                break;
+            default:
+                // For UC3, we assume valid input or handle default roughly
+                machineRiskFactor = 0.0;
+                break;
+        }
+
+        // Calculate Hazard Risk
+        // Formula: ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor)
+        double hazardRisk = ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor);
+
+        // Output Result
+        System.out.println("\n--- Hazard Analysis Result ---");
+        System.out.printf("Hazard Risk Score: %.2f%n", hazardRisk);
 
         scanner.close();
     }
