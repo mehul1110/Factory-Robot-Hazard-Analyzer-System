@@ -25,23 +25,46 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter Machinery State (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
+        double result = CalculateHazardRisk(armPrecision, workerDensity, machineryState);
+
+        // Output Result (only if valid, but for UC5 we rely on internal printing of
+        // errors)
+        // Since we return a double, we need a way to know if it failed.
+        // For this temporary step, checking if result is distinct or just letting it
+        // facilitate the flow.
+        // The prompt says "main() should only call the method".
+        // The validation inside prints errors.
+        // If valid, print score.
+        // Let's assume we print Score inside main if no error?
+        // Or better: print Score inside the method?
+        // "Must implement EXACTLY the method below: public double
+        // CalculateHazardRisk..."
+        // It returns double.
+        // If I print error, I still return something.
+
+        if (result != -1.0) {
+            System.out.println("\n--- Hazard Analysis Result ---");
+            System.out.printf("Hazard Risk Score: %.2f%n", result);
+        }
+
+        scanner.close();
+    }
+
+    public static double CalculateHazardRisk(double armPrecision, int workerDensity, String machineryState) {
         // Validation
         if (armPrecision < 0.0 || armPrecision > 1.0) {
             System.out.println("Error: Arm precision must be 0.0-1.0");
-            scanner.close();
-            return;
+            return -1.0;
         }
 
         if (workerDensity < 1 || workerDensity > 20) {
             System.out.println("Error: Worker density must be 1-20");
-            scanner.close();
-            return;
+            return -1.0;
         }
 
         if (!machineryState.equals("Worn") && !machineryState.equals("Faulty") && !machineryState.equals("Critical")) {
             System.out.println("Error: Unsupported machinery state");
-            scanner.close();
-            return;
+            return -1.0;
         }
 
         // Determine Risk Factor
@@ -56,20 +79,9 @@ public class FactoryRobotHazardAnalyzer {
             case "Critical":
                 machineRiskFactor = 3.0;
                 break;
-            default:
-                // Unreachable if validation passes
-                return;
-
         }
 
         // Calculate Hazard Risk
-        // Formula: ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor)
-        double hazardRisk = ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor);
-
-        // Output Result
-        System.out.println("\n--- Hazard Analysis Result ---");
-        System.out.printf("Hazard Risk Score: %.2f%n", hazardRisk);
-
-        scanner.close();
+        return ((1.0 - armPrecision) * 15.0) + (workerDensity * machineRiskFactor);
     }
 }
